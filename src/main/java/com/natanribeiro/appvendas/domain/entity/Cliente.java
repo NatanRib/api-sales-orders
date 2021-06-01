@@ -1,9 +1,25 @@
 package com.natanribeiro.appvendas.domain.entity;
 
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="cliente")
 public class Cliente {
 	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+	
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos;
 	
 	public Cliente() {}
 
@@ -29,6 +45,10 @@ public class Cliente {
 		this.nome = nome;
 	}
 
+	public List<Pedido> getPedidos() {
+		return pedidos;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,5 +72,10 @@ public class Cliente {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [id=" + id + ", nome=" + nome + "]";
 	}
 }
