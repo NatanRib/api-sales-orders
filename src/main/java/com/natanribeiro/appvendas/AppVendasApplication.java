@@ -62,6 +62,7 @@ public class AppVendasApplication {
 			boolean clienteExiste = clientes.existsById(2);
 			Cliente c5 = clientes.findClientefecthPedidos(1);
 			List<Pedido> pedQuerymethod = pedidos.findByClienteId(3);
+			List<Produto> prods = produtos.findAll();
 			
 			System.out.println("\nRESULTADOS\n");
 			c4.forEach(x -> {System.out.println(x);}); 
@@ -69,6 +70,7 @@ public class AppVendasApplication {
 			System.out.println("cliente com produtos:\n" + c5 + "\n" + c5.getPedidos()+"\n");
 			System.out.println("Pedidos por cliente 2:\n");
 			pedQuerymethod.forEach(p -> {System.out.println(p);});
+			prods.forEach(p -> {System.out.println(p);});
 		};
 	}
 }

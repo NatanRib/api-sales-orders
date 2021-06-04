@@ -1,13 +1,12 @@
 package com.natanribeiro.appvendas.resource.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.natanribeiro.appvendas.domain.entity.Cliente;
 import com.natanribeiro.appvendas.domain.repository.ClienteDAO;
@@ -27,19 +28,8 @@ public class ClienteController {
 	@Autowired
 	private ClienteDAO dao;
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> findById(@PathVariable Integer id){
-		
-		Optional<Cliente> cliente = dao.findById(id);
-		
-		if (cliente.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok(cliente.get());
-	}
-	
 	@GetMapping()
-	public ResponseEntity<List<Cliente>> Find(Cliente cliente){
+	public List<Cliente> Find(Cliente cliente){
 		
 		ExampleMatcher matcher = ExampleMatcher
 				.matching()
@@ -47,35 +37,42 @@ public class ClienteController {
 				.withStringMatcher(StringMatcher.CONTAINING);
 		Example<Cliente> example = Example.of(cliente, matcher);
 		
-		List<Cliente> clientes = dao.findAll(example);
-		return ResponseEntity.ok(clientes);
+		return dao.findAll(example);
 	}
 	
+	@GetMapping("/{id}")
+	public Cliente findById(@PathVariable Integer id){
+		return dao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+	}
+	
+	
 	@PostMapping
-	public ResponseEntity<Cliente> save(@RequestBody Cliente cliente){
-		Cliente c = dao.save(cliente);
-		return ResponseEntity.ok(c);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Cliente save(@RequestBody Cliente cliente){
+		if (cliente.getNome() == null || cliente.getNome().isBlank()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo nome não pode estar vazio");
+		} else if (cliente.getCpf() == null || cliente.getCpf().isBlank()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo cpf não pode estar vazio");
+		}
+		return dao.save(cliente);
 	}
 	
 	@DeleteMapping("{id}")
-	public ResponseEntity<Cliente> deleteById(@PathVariable Integer id) {
-		
-		if(dao.findById(id).isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		dao.deleteById(id);
-		return ResponseEntity.noContent().build();
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public Cliente deleteById(@PathVariable Integer id) {
+		return dao.findById(id).map( cliente -> {
+			dao.deleteById(cliente.getId());
+			return cliente;
+		}).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 	}
 	
 	@PutMapping("{id}")
-	public ResponseEntity<Cliente> updateById(@PathVariable Integer id, @RequestBody Cliente cliente){
-		Optional<Cliente> c = dao.findById(id);
-		
-		if(c.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
-		c.get().setNome(cliente.getNome());//preciso mapear as database exception
-		dao.save(c.get());
-		return ResponseEntity.ok(c.get());
+	public Cliente updateById(@PathVariable Integer id, @RequestBody Cliente cliente){
+		return dao.findById(id)
+			.map(c -> {
+				c.setNome(cliente.getNome());//preciso mapear as database exception
+				return dao.save(c);
+			})
+			.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
 	}
 }
