@@ -23,6 +23,8 @@ public interface ClienteDAO extends JpaRepository<Cliente, Integer>{
 	@Query(value="DELETE FROM cliente c WHERE c.nome = :nome", nativeQuery = true)
 	public void deleteByName(@Param("nome") String nome);//apenas para estudo
 	
+	public void deleteById(Integer id);
+	
 	@Query(value="SELECT c FROM Cliente c LEFT JOIN FETCH c.pedidos where c.id = :id")
 	public Cliente findClientefecthPedidos(@Param("id") int id);
 }
