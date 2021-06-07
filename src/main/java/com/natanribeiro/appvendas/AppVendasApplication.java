@@ -56,21 +56,6 @@ public class AppVendasApplication {
 			produtos.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 			pedidos.saveAll(Arrays.asList(pp1,pp2,pp3,pp4));
 			itens.saveAll(Arrays.asList(ip1,ip2,ip3,ip4,ip5));
-			
-			//clientes.deleteByName("Renan");
-			List<Cliente> c4 = clientes.findByNomeLike("NA");
-			boolean clienteExiste = clientes.existsById(2);
-			Cliente c5 = clientes.findClientefecthPedidos(1);
-			List<Pedido> pedQuerymethod = pedidos.findByClienteId(3);
-			List<Produto> prods = produtos.findAll();
-			
-			System.out.println("\nRESULTADOS\n");
-			c4.forEach(x -> {System.out.println(x);}); 
-			System.out.println("cliente com id 2 existe? " + clienteExiste + "\n");
-			System.out.println("cliente com produtos:\n" + c5 + "\n" + c5.getPedidos()+"\n");
-			System.out.println("Pedidos por cliente 2:\n");
-			pedQuerymethod.forEach(p -> {System.out.println(p);});
-			prods.forEach(p -> {System.out.println(p);});
 		};
 	}
 }
