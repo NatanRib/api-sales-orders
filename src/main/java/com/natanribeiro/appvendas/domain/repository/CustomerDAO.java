@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.natanribeiro.appvendas.domain.entity.Cliente;
+import com.natanribeiro.appvendas.domain.entity.Customer;
 
-public interface ClienteDAO extends JpaRepository<Cliente, Integer>{
+public interface CustomerDAO extends JpaRepository<Customer, Integer>{
 	
-	public boolean existsByNome(String nome);
+	public boolean existsByName(String nome);
 	
 	@Query(value="SELECT * FROM cliente c WHERE upper(c.nome) LIKE %:nome%", nativeQuery=true)
-	public List<Cliente> findByNomeLike(@Param("nome") String nome);
+	public List<Customer> findByNameLike(@Param("nome") String nome);
 	
 	@Modifying
 	@Transactional
@@ -25,6 +25,6 @@ public interface ClienteDAO extends JpaRepository<Cliente, Integer>{
 	
 	public void deleteById(Integer id);
 	
-	@Query(value="SELECT c FROM Cliente c LEFT JOIN FETCH c.pedidos where c.id = :id")
-	public Cliente findClientefecthPedidos(@Param("id") int id);
+	@Query(value="SELECT c FROM Customer c LEFT JOIN FETCH c.orders where c.id = :id")
+	public Customer findCustomerfecthPedidos(@Param("id") int id);
 }

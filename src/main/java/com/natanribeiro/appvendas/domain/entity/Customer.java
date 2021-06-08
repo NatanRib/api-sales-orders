@@ -1,42 +1,37 @@
 package com.natanribeiro.appvendas.domain.entity;
 
-import java.time.Instant;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name="pedido")
-public class Pedido {
+@Table(name="tb_customers")
+public class Customer {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	private String name;
+	private String cpf;
 	
-	@ManyToOne
-	@JoinColumn(name="cliente_id")
-	private Cliente cliente;
-	private Instant dataCriacao;
-	private Double total;
+	@JsonIgnore
+	@OneToMany(mappedBy = "customer")
+	private List<Order> orders;
 	
-	@OneToMany(mappedBy = "pedido")
-	private List<ItemPedido> items;
-	
-	public Pedido(){}
+	public Customer() {}
 
-	public Pedido(Integer id, Cliente cliente, Instant dataCriacao, Double total) {
+	public Customer(Integer id, String name, String cpf) {
 		super();
 		this.id = id;
-		this.cliente = cliente;
-		this.dataCriacao = dataCriacao;
-		this.total = total;
+		this.name = name;
+		this.cpf = cpf;
 	}
 
 	public Integer getId() {
@@ -47,28 +42,24 @@ public class Pedido {
 		this.id = id;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public String getName() {
+		return name;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Instant getDataCriacao() {
-		return dataCriacao;
+	public List<Order> getOrders() {
+		return orders;
 	}
 
-	public void setDataCriacao(Instant dataCriacao) {
-		this.dataCriacao = dataCriacao;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public Double getTotal() {
-		return total;
-	}
-
-	public void setTotal(Double total) {
-		this.total = total;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 	@Override
@@ -87,7 +78,7 @@ public class Pedido {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pedido other = (Pedido) obj;
+		Customer other = (Customer) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -98,6 +89,6 @@ public class Pedido {
 
 	@Override
 	public String toString() {
-		return "Pedido [id=" + id + ", dataCriacao=" + dataCriacao + ", total=" + total + "]";
+		return "Customer [id=" + id + ", name=" + name + "]";
 	}
 }

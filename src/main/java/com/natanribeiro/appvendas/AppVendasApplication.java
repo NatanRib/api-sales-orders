@@ -2,7 +2,6 @@ package com.natanribeiro.appvendas;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -10,14 +9,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.natanribeiro.appvendas.domain.entity.Cliente;
-import com.natanribeiro.appvendas.domain.entity.ItemPedido;
-import com.natanribeiro.appvendas.domain.entity.Pedido;
-import com.natanribeiro.appvendas.domain.entity.Produto;
-import com.natanribeiro.appvendas.domain.repository.ClienteDAO;
-import com.natanribeiro.appvendas.domain.repository.ItemPedidoDAO;
-import com.natanribeiro.appvendas.domain.repository.PedidoDAO;
-import com.natanribeiro.appvendas.domain.repository.ProdutoDAO;
+import com.natanribeiro.appvendas.domain.entity.Customer;
+import com.natanribeiro.appvendas.domain.entity.Order;
+import com.natanribeiro.appvendas.domain.entity.OrderItem;
+import com.natanribeiro.appvendas.domain.entity.Product;
+import com.natanribeiro.appvendas.domain.repository.CustomerDAO;
+import com.natanribeiro.appvendas.domain.repository.OrderDAO;
+import com.natanribeiro.appvendas.domain.repository.OrderItemDAO;
+import com.natanribeiro.appvendas.domain.repository.ProductDAO;
 
 @SpringBootApplication
 public class AppVendasApplication {
@@ -27,30 +26,30 @@ public class AppVendasApplication {
 	}
 	
 	@Bean
-	CommandLineRunner run(@Autowired ClienteDAO clientes, @Autowired ProdutoDAO produtos,
-			@Autowired PedidoDAO pedidos, @Autowired ItemPedidoDAO itens
+	CommandLineRunner run(@Autowired CustomerDAO clientes, @Autowired ProductDAO produtos,
+			@Autowired OrderDAO pedidos, @Autowired OrderItemDAO itens
 			) {
 		return args ->{
-			Cliente c1 = new Cliente(null, "Natan");
-			Cliente c2 = new Cliente(null, "Renan");
-			Cliente c3 = new Cliente(null, "Maria");
+			Customer c1 = new Customer(null, "Natan", "7687647754");
+			Customer c2 = new Customer(null, "Renan", "9864571525");
+			Customer c3 = new Customer(null, "Maria", "7609861233");
 			
-			Produto p1 = new Produto(null, "Celular Iphone 11", 4500.00);
-			Produto p2 = new Produto(null, "Celular Galaxy s20", 5500.0);
-			Produto p3= new Produto(null, "macbook pro", 14680.90);
-			Produto p4 = new Produto(null, "Notebook itautec m2", 2300.00);
-			Produto p5 = new Produto(null, "TV Sangsung led 51 pol", 3765.10);
+			Product p1 = new Product(null, "Celular Iphone 11", 4500.00);
+			Product p2 = new Product(null, "Celular Galaxy s20", 5500.0);
+			Product p3= new Product(null, "macbook pro", 14680.90);
+			Product p4 = new Product(null, "Notebook itautec m2", 2300.00);
+			Product p5 = new Product(null, "TV Sangsung led 51 pol", 3765.10);
 			
-			Pedido pp1 = new Pedido(null, c3, Instant.now(), 0.0);
-			Pedido pp2 = new Pedido(null, c2, Instant.now(), 0.0);
-			Pedido pp3 = new Pedido(null, c3, Instant.now(), 0.0);
-			Pedido pp4 = new Pedido(null, c1, Instant.now(), 0.0);
+			Order pp1 = new Order(null, c3, Instant.now(), 0.0);
+			Order pp2 = new Order(null, c2, Instant.now(), 0.0);
+			Order pp3 = new Order(null, c3, Instant.now(), 0.0);
+			Order pp4 = new Order(null, c1, Instant.now(), 0.0);
 			
-			ItemPedido ip1 = new ItemPedido(null, pp4, p5, 2);
-			ItemPedido ip2 = new ItemPedido(null, pp2, p1, 1);
-			ItemPedido ip3 = new ItemPedido(null, pp1, p2, 3);
-			ItemPedido ip4 = new ItemPedido(null, pp3, p3, 1);
-			ItemPedido ip5 = new ItemPedido(null, pp4, p4, 4);
+			OrderItem ip1 = new OrderItem(null, pp4, p5, 2);
+			OrderItem ip2 = new OrderItem(null, pp2, p1, 1);
+			OrderItem ip3 = new OrderItem(null, pp1, p2, 3);
+			OrderItem ip4 = new OrderItem(null, pp3, p3, 1);
+			OrderItem ip5 = new OrderItem(null, pp4, p4, 4);
 			
 			clientes.saveAll(Arrays.asList(c1,c2,c3));
 			produtos.saveAll(Arrays.asList(p1,p2,p3,p4,p5));

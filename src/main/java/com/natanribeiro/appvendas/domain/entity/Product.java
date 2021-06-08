@@ -4,35 +4,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "item_pedido")
-public class ItemPedido {
-	
+@Table(name="produto")
+public class Product {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	private String description;
+	private Double price;
 	
-	@ManyToOne
-	@JoinColumn(name="pedido_id")
-	private Pedido pedido;
-	
-	@ManyToOne
-	@JoinColumn(name="produto_id")
-	private Produto produto;
-	private Integer quantidade;
-	
-	public ItemPedido() {}
+	public Product() {}
 
-	public ItemPedido(Integer id, Pedido pedido, Produto produto, Integer quantidade) {
+	public Product(Integer id, String description, Double price) {
 		super();
 		this.id = id;
-		this.pedido = pedido;
-		this.produto = produto;
-		this.quantidade = quantidade;
+		this.description = description;
+		this.price = price;
 	}
 
 	public Integer getId() {
@@ -43,28 +33,20 @@ public class ItemPedido {
 		this.id = id;
 	}
 
-	public Pedido getPedido() {
-		return pedido;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public Produto getProduto() {
-		return produto;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Integer getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 	@Override
@@ -83,12 +65,17 @@ public class ItemPedido {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ItemPedido other = (ItemPedido) obj;
+		Product other = (Product) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", description=" + description + ", price=" + price + "]";
 	}
 }
