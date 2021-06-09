@@ -1,6 +1,5 @@
 package com.natanribeiro.appvendas;
 
-import java.time.Instant;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +39,10 @@ public class AppVendasApplication {
 			Product p4 = new Product(null, "Notebook itautec m2", 2300.00);
 			Product p5 = new Product(null, "TV Sangsung led 51 pol", 3765.10);
 			
-			Order pp1 = new Order(null, c3, Instant.now(), 0.0);
-			Order pp2 = new Order(null, c2, Instant.now(), 0.0);
-			Order pp3 = new Order(null, c3, Instant.now(), 0.0);
-			Order pp4 = new Order(null, c1, Instant.now(), 0.0);
+			Order pp1 = new Order(null, c3, 0.0);
+			Order pp2 = new Order(null, c2, 0.0);
+			Order pp3 = new Order(null, c3, 0.0);
+			Order pp4 = new Order(null, c1, 0.0);
 			
 			OrderItem ip1 = new OrderItem(null, pp4, p5, 2);
 			OrderItem ip2 = new OrderItem(null, pp2, p1, 1);

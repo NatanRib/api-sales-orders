@@ -1,5 +1,6 @@
 package com.natanribeiro.appvendas.domain.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_order_item")
+@Table(name = "tb_order_items")
 public class OrderItem {
 	
 	@Id
@@ -21,18 +22,20 @@ public class OrderItem {
 	private Order order;
 	
 	@ManyToOne
-	@JoinColumn(name="produto_id")
-	private Product produto;
-	private Integer quantidade;
+	@JoinColumn(name="product_id")
+	private Product product;
+	
+	@Column(nullable = false)
+	private Integer quantity;
 	
 	public OrderItem() {}
 
-	public OrderItem(Integer id, Order order, Product produto, Integer quantidade) {
+	public OrderItem(Integer id, Order order, Product product, Integer quantity) {
 		super();
 		this.id = id;
 		this.order = order;
-		this.produto = produto;
-		this.quantidade = quantidade;
+		this.product = product;
+		this.quantity = quantity;
 	}
 
 	public Integer getId() {
@@ -52,19 +55,19 @@ public class OrderItem {
 	}
 
 	public Product getProduct() {
-		return produto;
+		return product;
 	}
 
-	public void setProduct(Product produto) {
-		this.produto = produto;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
 	@Override

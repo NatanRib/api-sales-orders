@@ -2,6 +2,8 @@ package com.natanribeiro.appvendas.resource.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.natanribeiro.appvendas.resource.dto.ProductDTO;
+import com.natanribeiro.appvendas.resource.dto.product.CreateProductDTO;
+import com.natanribeiro.appvendas.resource.dto.product.GetProductDTO;
 import com.natanribeiro.appvendas.service.ProductService;
 
 
@@ -26,18 +29,18 @@ public class ProductController {
 	ProductService service;
 	
 	@GetMapping
-	public List<ProductDTO> find(ProductDTO produto){
-		return service.find(produto);
+	public List<GetProductDTO> find(CreateProductDTO produto){
+		return service.find(produto.toProduct());
 	}
 	
 	@GetMapping("{id}")
-	public ProductDTO findById(@PathVariable Integer id) {
+	public GetProductDTO findById(@PathVariable Integer id) {
 		return service.findById(id);
 	}
 	
 	@PostMapping
-	public ProductDTO save(@RequestBody ProductDTO produto) {
-		return service.save(produto);
+	public GetProductDTO save(@RequestBody @Valid CreateProductDTO produto) {
+		return service.save(produto.toProduct());
 	}
 	
 	@DeleteMapping("{id}")
@@ -47,8 +50,7 @@ public class ProductController {
 	}
 	
 	@PutMapping("{id}")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ProductDTO update(@PathVariable Integer id,@RequestBody ProductDTO produto) {
-		return service.update(id, produto);
+	public GetProductDTO update(@PathVariable Integer id,@RequestBody CreateProductDTO produto) {
+		return service.update(id, produto.toProduct());
 	}
 }

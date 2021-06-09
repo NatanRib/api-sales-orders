@@ -2,6 +2,8 @@ package com.natanribeiro.appvendas.resource.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,49 +15,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
-import com.natanribeiro.appvendas.resource.dto.CustomerDTO;
+import com.natanribeiro.appvendas.resource.dto.customer.CreateCustomerDTO;
+import com.natanribeiro.appvendas.resource.dto.customer.GetCustomerDTO;
+import com.natanribeiro.appvendas.resource.dto.customer.UpdateCustomerDTO;
 import com.natanribeiro.appvendas.service.CustomerService;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/customers")
 public class CustomerController {
 
 	@Autowired
 	private CustomerService service;
 	
 	@GetMapping()
-	public List<CustomerDTO> Find(CustomerDTO cliente){
-		return service.findAll(cliente);
+	public List<GetCustomerDTO> Find(CreateCustomerDTO customer){
+		return service.findAll(customer.toCustomer());
 	}
 	
 	@GetMapping("/{id}")
-	public CustomerDTO findById(@PathVariable Integer id){
+	public GetCustomerDTO findById(@PathVariable Integer id){
 		return service.findById(id);
 	}
 	
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CustomerDTO save(@RequestBody CustomerDTO cliente){
-		if (cliente.getName() == null || cliente.getName().isBlank()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo nome não pode estar vazio");
-		} else if (cliente.getCpf() == null || cliente.getCpf().isBlank()) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Campo cpf não pode estar vazio");
-		}
-		return service.save(cliente);
+	public GetCustomerDTO save(@RequestBody @Valid CreateCustomerDTO customer){
+		return service.save(customer.toCustomer());
 	}
 	
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public CustomerDTO deleteById(@PathVariable Integer id) {
-		return service.findById(id);
+	public void deleteById(@PathVariable Integer id) {
+		service.delete(id);
 	}
 	
 	@PutMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void updateById(@PathVariable Integer id, @RequestBody CustomerDTO cliente){
-		service.delete(id);
+	public GetCustomerDTO updateById(@PathVariable Integer id, @RequestBody UpdateCustomerDTO customer){
+		return service.update(id, customer.toCustomer());
 	}
 }

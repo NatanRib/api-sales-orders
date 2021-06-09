@@ -3,6 +3,7 @@ package com.natanribeiro.appvendas.domain.entity;
 import java.time.Instant;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,7 +24,11 @@ public class Order {
 	@ManyToOne
 	@JoinColumn(name="customer_id")
 	private Customer customer;
+	
+	@Column(nullable = false)
 	private Instant createdAt;
+	
+	@Column(nullable = false)
 	private Double total;
 	
 	@OneToMany(mappedBy = "order")
@@ -31,11 +36,11 @@ public class Order {
 	
 	public Order(){}
 
-	public Order(Integer id, Customer customer, Instant createdAt, Double total) {
+	public Order(Integer id, Customer customer, Double total) {
 		super();
 		this.id = id;
 		this.customer = customer;
-		this.createdAt = createdAt;
+		this.createdAt = Instant.now();
 		this.total = total;
 	}
 
@@ -55,12 +60,8 @@ public class Order {
 		this.customer = customer;
 	}
 
-	public Instant getDataCriacao() {
+	public Instant getCreatedAt() {
 		return createdAt;
-	}
-
-	public void setDataCriacao(Instant createdAt) {
-		this.createdAt = createdAt;
 	}
 
 	public Double getTotal() {
@@ -69,6 +70,10 @@ public class Order {
 
 	public void setTotal(Double total) {
 		this.total = total;
+	}
+	
+	public List<OrderItem> getItems() {
+		return items;
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.natanribeiro.appvendas.domain.entity.Product;
 import com.natanribeiro.appvendas.domain.repository.ProductDAO;
-import com.natanribeiro.appvendas.resource.dto.ProductDTO;
+import com.natanribeiro.appvendas.resource.dto.product.GetProductDTO;
 import com.natanribeiro.appvendas.service.ProductService;
 
 @Service
@@ -23,22 +23,22 @@ public class ProductServiceImpl implements ProductService {
 	ProductDAO dao;
 
 	@Override
-	public List<ProductDTO> find(ProductDTO produto) {
+	public List<GetProductDTO> find(Product produto) {
 		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase().withStringMatcher(StringMatcher.CONTAINING);
-		Example<Product> example = Example.of(produto.toProduct(), matcher);
-		return dao.findAll(example).stream().map(p -> ProductDTO.fromProduct(p)).collect(Collectors.toList());
+		Example<Product> example = Example.of(produto, matcher);
+		return dao.findAll(example).stream().map(p -> GetProductDTO.fromProduct(p)).collect(Collectors.toList());
 	}
 
 	@Override
-	public ProductDTO findById(Integer id) {
-		return dao.findById(id).map(p -> ProductDTO.fromProduct(p))
+	public GetProductDTO findById(Integer id) {
+		return dao.findById(id).map(p -> GetProductDTO.fromProduct(p))
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 	}
 
 	@Override
-	public ProductDTO save(ProductDTO produto) {
+	public GetProductDTO save(Product produto) {
 		if (produto.getDescription() != null && produto.getPrice() != null) {
-			return ProductDTO.fromProduct(dao.save(produto.toProduct()));
+			return GetProductDTO.fromProduct(dao.save(produto));
 		}
 		throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 	}
@@ -49,9 +49,9 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductDTO update(Integer id, ProductDTO produto) {
+	public GetProductDTO update(Integer id, Product produto) {
 		if (produto.getDescription() != null && produto.getPrice() != null) {
-			return ProductDTO.fromProduct(dao.save(
+			return GetProductDTO.fromProduct(dao.save(
 					dao.findById(id).map(p -> new Product(p.getId(), produto.getDescription(), produto.getPrice()))
 							.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))));
 		}

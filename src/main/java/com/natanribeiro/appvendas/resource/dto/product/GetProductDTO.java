@@ -1,15 +1,15 @@
-package com.natanribeiro.appvendas.resource.dto;
+package com.natanribeiro.appvendas.resource.dto.product;
 
 import com.natanribeiro.appvendas.domain.entity.Product;
 
-public class ProductDTO {
+public class GetProductDTO {
 	private Integer id;
 	private String description;
 	private Double price;
 	
-	public ProductDTO() {}
+	public GetProductDTO() {}
 
-	public ProductDTO(Integer id, String description, Double price) {
+	public GetProductDTO(Integer id, String description, Double price) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -48,7 +48,7 @@ public class ProductDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ProductDTO other = (ProductDTO) obj;
+		GetProductDTO other = (GetProductDTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -57,11 +57,7 @@ public class ProductDTO {
 		return true;
 	}
 	
-	public Product toProduct() {
-		return new Product(null, description, price);
-	}
-	
-	public static ProductDTO fromProduct(Product p) {
-		return new ProductDTO(p.getId(), p.getDescription(), p.getPrice());
+	public static GetProductDTO fromProduct(Product p) {
+		return new GetProductDTO(p.getId(), p.getDescription(), p.getPrice());
 	}
 }

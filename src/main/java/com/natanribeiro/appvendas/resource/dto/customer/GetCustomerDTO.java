@@ -1,19 +1,19 @@
-package com.natanribeiro.appvendas.resource.dto;
+package com.natanribeiro.appvendas.resource.dto.customer;
 
 import java.io.Serializable;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
 
-public class CustomerDTO implements Serializable{
+public class GetCustomerDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
 	private String name;
 	private String cpf;
 	
-	CustomerDTO(){}
+	GetCustomerDTO(){}
 
-	public CustomerDTO(Integer id, String name, String cpf) {
+	public GetCustomerDTO(Integer id, String name, String cpf) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -22,10 +22,6 @@ public class CustomerDTO implements Serializable{
 
 	public Integer getId() {
 		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 	
 	public String getName() {
@@ -52,7 +48,7 @@ public class CustomerDTO implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CustomerDTO other = (CustomerDTO) obj;
+		GetCustomerDTO other = (GetCustomerDTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -60,12 +56,9 @@ public class CustomerDTO implements Serializable{
 			return false;
 		return true;
 	}
-	public Customer toCustomer() {
-		return new Customer(null, this.getName(), this.getCpf()); 
-	}
 
-	public static CustomerDTO fromCustomer(Customer c) {
-		return new CustomerDTO(c.getId(), c.getName(), c.getCpf());
+	public static GetCustomerDTO fromCustomer(Customer c) {
+		return new GetCustomerDTO(c.getId(), c.getName(), c.getCpf());
 	}
 	
 	

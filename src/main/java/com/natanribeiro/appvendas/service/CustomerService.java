@@ -2,15 +2,18 @@ package com.natanribeiro.appvendas.service;
 
 import java.util.List;
 
-import com.natanribeiro.appvendas.resource.dto.CustomerDTO;
+import com.natanribeiro.appvendas.domain.entity.Customer;
+import com.natanribeiro.appvendas.resource.dto.customer.GetCustomerDTO;
 
 public interface CustomerService {
 
-	List<CustomerDTO> findAll(CustomerDTO cliente);
+	List<GetCustomerDTO> findAll(Customer cliente);
 
-	CustomerDTO findById(Integer id);
+	GetCustomerDTO findById(Integer id);
 
-	CustomerDTO save(CustomerDTO cliente);
+	GetCustomerDTO save(Customer cliente);
 
 	void delete(Integer id);
+	
+	GetCustomerDTO update(Integer id, Customer customer);
 }
