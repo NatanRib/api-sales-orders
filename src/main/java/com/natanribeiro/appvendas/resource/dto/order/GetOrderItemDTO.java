@@ -8,15 +8,17 @@ public class GetOrderItemDTO {
 	private Integer productId;
 	private String productDescription;
 	private Integer quantity;
+	private Double price;
 	
 	public GetOrderItemDTO() {}
 	
-	public GetOrderItemDTO(Integer id, Integer productId, String productDescription, Integer quantity) {
+	public GetOrderItemDTO(Integer id, Integer productId, String productDescription, Integer quantity, Double price) {
 		super();
 		this.id = id;
 		this.productId = productId;
 		this.productDescription = productDescription;
 		this.quantity = quantity;
+		this.price = price;
 	}
 	
 	public Integer getId() {
@@ -34,9 +36,13 @@ public class GetOrderItemDTO {
 	public Integer getQuantity() {
 		return quantity;
 	}
+	
+	public Double getPrice() {
+		return price;
+	}
 
 	public static GetOrderItemDTO fromOrderItem(OrderItem oi) {
 		return new GetOrderItemDTO(oi.getId(), oi.getProduct().getId(),
-				oi.getProduct().getDescription(), oi.getQuantity());
+				oi.getProduct().getDescription(), oi.getQuantity(), oi.getPrice());
 	}
 }

@@ -1,6 +1,7 @@
 package com.natanribeiro.appvendas.domain.entity;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,9 +22,7 @@ public class Order {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne
-	@JoinColumn(name="customer_id")
-	private Customer customer;
+	private String description;
 	
 	@Column(nullable = false)
 	private Instant createdAt;
@@ -31,17 +30,22 @@ public class Order {
 	@Column(nullable = false)
 	private Double total;
 	
+	@ManyToOne
+	@JoinColumn(name="customer_id")
+	private Customer customer;
+	
 	@OneToMany(mappedBy = "order")
-	private List<OrderItem> items;
+	private List<OrderItem> items = new ArrayList<>();
 	
 	public Order(){}
 
-	public Order(Integer id, Customer customer, Double total) {
+	public Order(Integer id, String description, Customer customer) {
 		super();
 		this.id = id;
+		this.description = description;
 		this.customer = customer;
+		this.total = 0.0;
 		this.createdAt = Instant.now();
-		this.total = total;
 	}
 
 	public Integer getId() {
@@ -50,6 +54,14 @@ public class Order {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Customer getCustomer() {
@@ -65,6 +77,7 @@ public class Order {
 	}
 
 	public Double getTotal() {
+		total = sumTotal();
 		return total;
 	}
 
@@ -100,9 +113,18 @@ public class Order {
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", createdAt=" + createdAt + ", total=" + total + "]";
+		return "Order [id=" + id + ", description=" + description + ", createdAt=" + createdAt + ", total=" + total
+				+ ", customer=" + customer + ", items=" + items + "]";
+	}
+
+	private Double sumTotal(){
+		Double sum = 0.0;
+		for (OrderItem i: items ) {
+			sum += i.getProduct().getPrice() * i.getQuantity();
+		}
+		return sum;
 	}
 }

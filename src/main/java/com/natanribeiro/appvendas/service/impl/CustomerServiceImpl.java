@@ -38,13 +38,6 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	public GetCustomerDTO save(Customer cliente) {
-
-		
-		/*if (validator.canCreateCustomer(cliente)) {
-			return GetCustomerDTO.fromCustomer(dao.save(cliente));
-		}
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-		*/
 		return GetCustomerDTO.fromCustomer(dao.save(cliente));
 	}
 	

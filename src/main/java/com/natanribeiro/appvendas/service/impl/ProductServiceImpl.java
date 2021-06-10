@@ -50,11 +50,13 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public GetProductDTO update(Integer id, Product produto) {
-		if (produto.getDescription() != null && produto.getPrice() != null) {
-			return GetProductDTO.fromProduct(dao.save(
-					dao.findById(id).map(p -> new Product(p.getId(), produto.getDescription(), produto.getPrice()))
-							.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))));
+		Product p = dao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		if(produto.getDescription() != null) {
+			p.setDescription(produto.getDescription());
 		}
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		if(produto.getPrice() != null) {
+			p.setPrice(produto.getPrice());
+		}
+		return GetProductDTO.fromProduct(dao.save(p));
 	}
 }
