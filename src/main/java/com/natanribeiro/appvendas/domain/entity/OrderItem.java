@@ -33,13 +33,13 @@ public class OrderItem {
 	
 	public OrderItem() {}
 
-	public OrderItem(Integer id, Order order, Product product, Integer quantity, Double price) {
+	public OrderItem(Integer id, Order order, Product product, Integer quantity) {
 		super();
 		this.id = id;
 		this.order = order;
 		this.product = product;
 		this.quantity = quantity;
-		this.price = price;
+		this.price = this.product.getPrice();
 	}
 
 	public Integer getId() {
@@ -64,6 +64,7 @@ public class OrderItem {
 
 	public void setProduct(Product product) {
 		this.product = product;
+		this.price = product.getPrice();
 	}
 
 	public Integer getQuantity() {

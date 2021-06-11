@@ -20,6 +20,7 @@ import com.natanribeiro.appvendas.domain.entity.Order;
 import com.natanribeiro.appvendas.resource.dto.order.CreateOrderDTO;
 import com.natanribeiro.appvendas.resource.dto.order.GetOrderDTO;
 import com.natanribeiro.appvendas.resource.dto.order.UpdateOrderDTO;
+import com.natanribeiro.appvendas.resource.dto.orderItem.CreateOrderItemDTO;
 import com.natanribeiro.appvendas.service.OrderService;
 
 @RestController
@@ -54,5 +55,15 @@ public class OrderControlller {
 	@PutMapping("/{id}")
 	public GetOrderDTO update(@PathVariable Integer id, @RequestBody UpdateOrderDTO order) {
 		return service.update(id, order.toOrder());
+	}
+	
+	@PostMapping("/{id}/add_item")
+	public GetOrderDTO addItem(@PathVariable Integer id, @RequestBody CreateOrderItemDTO orderItem) {
+		return service.addItem(id, orderItem.toOrderItem());
+	}
+	
+	@DeleteMapping("/{orderId}/delete_item/{itemId}")
+	public GetOrderDTO deleteItem(@PathVariable Integer orderId,@PathVariable Integer itemId) {
+		return service.deleteItem(orderId, itemId);
 	}
 }

@@ -44,11 +44,11 @@ public class AppVendasApplication {
 			Order pp3 = new Order(null, "Venda de mercadoria", c3);
 			Order pp4 = new Order(null, "Venda de mercadoria", c1);
 			
-			OrderItem ip1 = new OrderItem(null, pp4, p5, 2, p5.getPrice());
-			OrderItem ip2 = new OrderItem(null, pp2, p1, 1, p1.getPrice());
-			OrderItem ip3 = new OrderItem(null, pp1, p2, 3, p2.getPrice());
-			OrderItem ip4 = new OrderItem(null, pp3, p3, 1, p3.getPrice());
-			OrderItem ip5 = new OrderItem(null, pp4, p4, 4, p4.getPrice());
+			OrderItem ip1 = new OrderItem(null, pp4, p5, 2);
+			OrderItem ip2 = new OrderItem(null, pp2, p1, 1);
+			OrderItem ip3 = new OrderItem(null, pp1, p2, 3);
+			OrderItem ip4 = new OrderItem(null, pp3, p3, 1);
+			OrderItem ip5 = new OrderItem(null, pp4, p4, 4);
 			
 			clientes.saveAll(Arrays.asList(c1,c2,c3));
 			produtos.saveAll(Arrays.asList(p1,p2,p3,p4,p5));

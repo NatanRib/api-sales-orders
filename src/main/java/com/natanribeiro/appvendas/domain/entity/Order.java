@@ -123,7 +123,7 @@ public class Order {
 	private Double sumTotal(){
 		Double sum = 0.0;
 		for (OrderItem i: items ) {
-			sum += i.getProduct().getPrice() * i.getQuantity();
+			sum += (i.getPrice() * i.getQuantity());
 		}
 		return sum;
 	}

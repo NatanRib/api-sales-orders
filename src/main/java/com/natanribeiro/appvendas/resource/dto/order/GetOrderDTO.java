@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.natanribeiro.appvendas.domain.entity.Order;
 import com.natanribeiro.appvendas.domain.entity.OrderItem;
+import com.natanribeiro.appvendas.resource.dto.orderItem.GetOrderItemDTO;
 
 public class GetOrderDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
