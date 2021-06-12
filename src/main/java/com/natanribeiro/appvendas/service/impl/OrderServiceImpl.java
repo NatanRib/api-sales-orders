@@ -38,23 +38,25 @@ public class OrderServiceImpl implements OrderService{
 	@Autowired
 	ProductDAO productDAO;
 	
-	private String orderNotFound = "Order not found!";
-	private String productNotFound = "Product not found!";
-	private String customerNotFound = "Customer not found!";
+	private String orderNotFound = "Order with id %d not found!";
+	private String productNotFound = "Product with id %d not found!";
+	private String customerNotFound = "Customer with id %d not found!";
 
 	@Override
-	public List<GetOrderDTO> find(Order order) {
+	public List<GetOrderDTO> findAll(Order order) {
 		ExampleMatcher matcher = ExampleMatcher.matching()
 				.withIgnoreCase()
 				.withStringMatcher(StringMatcher.CONTAINING);
 		Example<Order> example = Example.of(order, matcher);
-		return orderDAO.findAll(example).stream().map(o -> GetOrderDTO.fromOrder(o)).collect(Collectors.toList());
+		return orderDAO.findAll(example).stream().map(o -> 
+			GetOrderDTO.fromOrder(o)).collect(Collectors.toList());
 	}
 
 	@Override
 	public GetOrderDTO findById(Integer id) {
 		return GetOrderDTO.fromOrder(orderDAO.findById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+						String.format(orderNotFound, id))));
 	}
 	
 	@Override
@@ -63,17 +65,20 @@ public class OrderServiceImpl implements OrderService{
 		if (c.isPresent()) {
 			order.setCustomer(c.get());
 		}else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, customerNotFound);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
+					String.format(customerNotFound, order.getCustomer().getId()));
 		}		
 		return GetOrderDTO.fromOrder(orderDAO.save(order));
 	}
 
 	@Override
 	public GetOrderDTO update(Integer id, Order order) {
-		Order o = orderDAO.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+		Order o = orderDAO.findById(id).orElseThrow(() -> 
+			new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(orderNotFound, id)));
 		if(order.getCustomer() != null) {
 			o.setCustomer(customerDAO.findById(order.getCustomer().getId())
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, customerNotFound)));
+					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+							String.format(customerNotFound, order.getCustomer().getId()))));
 		}
 		if(order.getDescription() != null) {
 			o.setDescription(order.getDescription());
@@ -83,7 +88,8 @@ public class OrderServiceImpl implements OrderService{
 	
 	public void delete(Integer id) {
 		orderDAO.delete(orderDAO.findById(id).
-				orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
+				orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
+						, String.format(customerNotFound, id))));
 	}
 
 	@Override
@@ -93,12 +99,14 @@ public class OrderServiceImpl implements OrderService{
 		if (order.isPresent()) {
 			orderItem.setOrder(order.get());;
 		}else {			
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, orderNotFound);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
+					String.format(orderNotFound, id));
 		}
 		if (product.isPresent()) {
 			orderItem.setProduct(product.get());
 		}else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, productNotFound);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					String.format(productNotFound, orderItem.getProduct().getId()));
 		}
 		orderItemDAO.save(orderItem);
 		return GetOrderDTO.fromOrder(orderDAO.findById(id).get());
@@ -113,9 +121,10 @@ public class OrderServiceImpl implements OrderService{
 				orderItemDAO.deleteByIdAndOrderId(itemId, orderId);
 				return GetOrderDTO.fromOrder(order.get());
 			}else {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order item not found or not present at this order!");
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order item not found or not present at order!");
 			}
 		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND, orderNotFound);
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+				String.format(orderNotFound, orderId));
 	}
 }

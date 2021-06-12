@@ -52,8 +52,8 @@ public class CustomerController {
 	}
 	
 	@PutMapping("{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public GetCustomerDTO updateById(@PathVariable Integer id, @RequestBody UpdateCustomerDTO customer){
 		return service.update(id, customer.toCustomer());
 	}
 }
+	

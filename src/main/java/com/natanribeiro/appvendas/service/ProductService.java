@@ -7,7 +7,7 @@ import com.natanribeiro.appvendas.resource.dto.product.GetProductDTO;
 
 public interface ProductService {
 
-	List<GetProductDTO> find(Product produto);
+	List<GetProductDTO> findAll(Product produto);
 
 	GetProductDTO findById(Integer id);
 

@@ -7,7 +7,6 @@ import com.natanribeiro.appvendas.domain.entity.OrderItem;
 public class GetOrderItemDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
 	private Integer productId;
 	private String productDescription;
 	private Integer quantity;
@@ -15,18 +14,13 @@ public class GetOrderItemDTO implements Serializable{
 	
 	public GetOrderItemDTO() {}
 
-	public GetOrderItemDTO(Integer id, Integer productId, 
+	public GetOrderItemDTO(Integer productId, 
 			String productDdescription, Integer quantity, Double price) {
 		super();
-		this.id = id;
 		this.productId = productId;
 		this.productDescription = productDdescription; 
 		this.quantity = quantity;
 		this.price = price;
-	}
-
-	public Integer getId() {
-		return id;
 	}
 
 	public Integer getproductId() {
@@ -46,7 +40,7 @@ public class GetOrderItemDTO implements Serializable{
 	}
 	
 	public static GetOrderItemDTO fromOrderItem(OrderItem oi) {
-		return new GetOrderItemDTO(oi.getId(), oi.getProduct().getId(),
+		return new GetOrderItemDTO(oi.getProduct().getId(),
 				oi.getProduct().getDescription(), oi.getQuantity(), oi.getPrice());
 	}
 }

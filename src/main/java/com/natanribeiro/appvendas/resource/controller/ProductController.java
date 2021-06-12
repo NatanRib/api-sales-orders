@@ -22,7 +22,7 @@ import com.natanribeiro.appvendas.service.ProductService;
 
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/products")
 public class ProductController {
 
 	@Autowired
@@ -30,7 +30,7 @@ public class ProductController {
 	
 	@GetMapping
 	public List<GetProductDTO> find(CreateProductDTO produto){
-		return service.find(produto.toProduct());
+		return service.findAll(produto.toProduct());
 	}
 	
 	@GetMapping("{id}")

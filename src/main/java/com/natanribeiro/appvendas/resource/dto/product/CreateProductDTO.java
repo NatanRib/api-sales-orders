@@ -10,10 +10,10 @@ import com.natanribeiro.appvendas.domain.entity.Product;
 public class CreateProductDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@NotEmpty(message = "The filed description cannot be null or empty")
+	@NotEmpty(message = "The field description cannot be null or empty")
 	private String description;
 	
-	@NotNull(message = "The filed price cannot be null")
+	@NotNull(message = "The field price cannot be null")
 	private Double price;
 	
 	public CreateProductDTO(String description, Double price) {

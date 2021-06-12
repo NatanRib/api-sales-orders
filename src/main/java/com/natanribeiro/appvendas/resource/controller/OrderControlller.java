@@ -32,7 +32,7 @@ public class OrderControlller {
 	
 	@GetMapping
 	public List<GetOrderDTO> find(Order order){
-		return service.find(order);
+		return service.findAll(order);
 	}
 	
 	@GetMapping("/{id}")

@@ -8,7 +8,7 @@ import com.natanribeiro.appvendas.resource.dto.order.GetOrderDTO;
 
 public interface OrderService {
 
-	public List<GetOrderDTO> find (Order order);
+	public List<GetOrderDTO> findAll (Order order);
 
 	public GetOrderDTO findById(Integer id);
 
