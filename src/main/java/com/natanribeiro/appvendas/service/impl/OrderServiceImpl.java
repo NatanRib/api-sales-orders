@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
 import com.natanribeiro.appvendas.domain.entity.Order;
@@ -21,7 +19,10 @@ import com.natanribeiro.appvendas.domain.repository.OrderDAO;
 import com.natanribeiro.appvendas.domain.repository.OrderItemDAO;
 import com.natanribeiro.appvendas.domain.repository.ProductDAO;
 import com.natanribeiro.appvendas.resource.dto.order.GetOrderDTO;
+import com.natanribeiro.appvendas.resource.dto.order.UpdateOrderStatusDTO;
 import com.natanribeiro.appvendas.service.OrderService;
+import com.natanribeiro.appvendas.service.exception.BadRequestException;
+import com.natanribeiro.appvendas.service.exception.RecordNotFoundException;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -55,7 +56,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public GetOrderDTO findById(Integer id) {
 		return GetOrderDTO.fromOrder(orderDAO.findById(id).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+				() -> new RecordNotFoundException(
 						String.format(orderNotFound, id))));
 	}
 	
@@ -65,8 +66,8 @@ public class OrderServiceImpl implements OrderService{
 		if (c.isPresent()) {
 			order.setCustomer(c.get());
 		}else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
-					String.format(customerNotFound, order.getCustomer().getId()));
+			throw new RecordNotFoundException(String.format(
+					customerNotFound, order.getCustomer().getId()));
 		}		
 		return GetOrderDTO.fromOrder(orderDAO.save(order));
 	}
@@ -74,10 +75,10 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public GetOrderDTO update(Integer id, Order order) {
 		Order o = orderDAO.findById(id).orElseThrow(() -> 
-			new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(orderNotFound, id)));
+			new RecordNotFoundException(String.format(orderNotFound, id)));
 		if(order.getCustomer() != null) {
 			o.setCustomer(customerDAO.findById(order.getCustomer().getId())
-					.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, 
+					.orElseThrow(() -> new RecordNotFoundException(
 							String.format(customerNotFound, order.getCustomer().getId()))));
 		}
 		if(order.getDescription() != null) {
@@ -88,8 +89,8 @@ public class OrderServiceImpl implements OrderService{
 	
 	public void delete(Integer id) {
 		orderDAO.delete(orderDAO.findById(id).
-				orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND
-						, String.format(customerNotFound, id))));
+				orElseThrow(() -> new RecordNotFoundException(
+						String.format(customerNotFound, id))));
 	}
 
 	@Override
@@ -99,14 +100,13 @@ public class OrderServiceImpl implements OrderService{
 		if (order.isPresent()) {
 			orderItem.setOrder(order.get());;
 		}else {			
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, 
-					String.format(orderNotFound, id));
+			throw new RecordNotFoundException(String.format(orderNotFound, id));
 		}
 		if (product.isPresent()) {
 			orderItem.setProduct(product.get());
 		}else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					String.format(productNotFound, orderItem.getProduct().getId()));
+			throw new RecordNotFoundException(String.format(
+					productNotFound, orderItem.getProduct().getId()));
 		}
 		orderItemDAO.save(orderItem);
 		return GetOrderDTO.fromOrder(orderDAO.findById(id).get());
@@ -121,10 +121,21 @@ public class OrderServiceImpl implements OrderService{
 				orderItemDAO.deleteByIdAndOrderId(itemId, orderId);
 				return GetOrderDTO.fromOrder(order.get());
 			}else {
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order item not found or not present at order!");
+				throw new RecordNotFoundException("Order item not found or not present at order!");
 			}
 		}
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-				String.format(orderNotFound, orderId));
+		throw new RecordNotFoundException(String.format(orderNotFound, orderId));
+	}
+
+	@Override
+	public GetOrderDTO updateStatus(Integer id, UpdateOrderStatusDTO status) {
+		Order order = orderDAO.findById(id).orElseThrow(() -> 
+			new RecordNotFoundException(String.format(customerNotFound, id)));
+		try {
+			order.setStatus(status.toOrderStatus());			
+			return GetOrderDTO.fromOrder(orderDAO.save(order));
+		} catch (IllegalArgumentException e) {
+			throw new BadRequestException("Status sent not matching");
+		}
 	}
 }

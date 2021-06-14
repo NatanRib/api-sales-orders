@@ -9,15 +9,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
 import com.natanribeiro.appvendas.domain.repository.CustomerDAO;
 import com.natanribeiro.appvendas.resource.dto.customer.GetCustomerDTO;
 import com.natanribeiro.appvendas.service.CustomerService;
 import com.natanribeiro.appvendas.service.exception.DatabaseException;
+import com.natanribeiro.appvendas.service.exception.RecordNotFoundException;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -38,8 +37,7 @@ public class CustomerServiceImpl implements CustomerService{
 
 	public GetCustomerDTO findById(Integer id) {
 		return dao.findById(id).map(c -> GetCustomerDTO.fromCustomer(c))
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						String.format(customerNotFound, id)));
+				.orElseThrow(() -> new RecordNotFoundException(String.format(customerNotFound, id)));
 	}
 
 	public GetCustomerDTO save(Customer cliente) {
@@ -48,8 +46,8 @@ public class CustomerServiceImpl implements CustomerService{
 	
 	public void delete(Integer id){
 		try {			
-			dao.delete(dao.findById(id).orElseThrow(()-> new ResponseStatusException(
-					HttpStatus.NOT_FOUND, String.format(customerNotFound, id))));
+			dao.delete(dao.findById(id).orElseThrow(()-> new RecordNotFoundException(
+					String.format(customerNotFound, id))));
 		}catch (DataIntegrityViolationException e) {
 			throw new DatabaseException("Database exception: " + e.getMostSpecificCause().getMessage());
 		}
@@ -65,8 +63,7 @@ public class CustomerServiceImpl implements CustomerService{
 			c.get().setCpf(customer.getCpf());
 			return GetCustomerDTO.fromCustomer(dao.save(c.get()));
 		}else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					String.format(customerNotFound, id));
+			throw new RecordNotFoundException(String.format(customerNotFound, id));
 		}
 	}
 }

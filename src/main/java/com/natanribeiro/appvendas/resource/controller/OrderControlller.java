@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +21,7 @@ import com.natanribeiro.appvendas.domain.entity.Order;
 import com.natanribeiro.appvendas.resource.dto.order.CreateOrderDTO;
 import com.natanribeiro.appvendas.resource.dto.order.GetOrderDTO;
 import com.natanribeiro.appvendas.resource.dto.order.UpdateOrderDTO;
+import com.natanribeiro.appvendas.resource.dto.order.UpdateOrderStatusDTO;
 import com.natanribeiro.appvendas.resource.dto.orderItem.CreateOrderItemDTO;
 import com.natanribeiro.appvendas.service.OrderService;
 
@@ -65,5 +67,10 @@ public class OrderControlller {
 	@DeleteMapping("/{orderId}/delete_item/{itemId}")
 	public GetOrderDTO deleteItem(@PathVariable Integer orderId,@PathVariable Integer itemId) {
 		return service.deleteItem(orderId, itemId);
+	}
+	
+	@PatchMapping("/{id}")
+	public GetOrderDTO updateStatus(@PathVariable Integer id, @RequestBody UpdateOrderStatusDTO status) {
+		return service.updateStatus(id, status);
 	}
 }

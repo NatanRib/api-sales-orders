@@ -8,15 +8,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.natanribeiro.appvendas.domain.entity.Product;
 import com.natanribeiro.appvendas.domain.repository.ProductDAO;
 import com.natanribeiro.appvendas.resource.dto.product.GetProductDTO;
 import com.natanribeiro.appvendas.service.ProductService;
 import com.natanribeiro.appvendas.service.exception.DatabaseException;
+import com.natanribeiro.appvendas.service.exception.RecordNotFoundException;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -36,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public GetProductDTO findById(Integer id) {
 		return dao.findById(id).map(p -> GetProductDTO.fromProduct(p))
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+				.orElseThrow(() -> new RecordNotFoundException(
 						String.format(notFound, id)));
 	}
 
@@ -48,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void delete(Integer id) {
 		try {			
-			dao.delete(dao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+			dao.delete(dao.findById(id).orElseThrow(() -> new RecordNotFoundException(
 					String.format(notFound, id))));
 		}catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMostSpecificCause().getMessage());
@@ -57,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public GetProductDTO update(Integer id, Product produto) {
-		Product p = dao.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+		Product p = dao.findById(id).orElseThrow(() -> new RecordNotFoundException(
 				String.format(notFound, id)));
 		if(produto.getDescription() != null) {
 			p.setDescription(produto.getDescription());

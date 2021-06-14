@@ -19,10 +19,11 @@ public class GetOrderDTO implements Serializable{
 	private Instant createdAt;
 	private Double total;
 	private List<GetOrderItemDTO> items = new ArrayList<>();
+	private String status;
 	
 	public GetOrderDTO() {}
 
-	public GetOrderDTO(Integer id, String description, Integer customerId, String customerName, Instant createdAt, Double total) {
+	public GetOrderDTO(Integer id, String description, Integer customerId, String customerName, Instant createdAt, Double total, String status) {
 		super();
 		this.id = id;
 		this.description = description;
@@ -30,6 +31,7 @@ public class GetOrderDTO implements Serializable{
 		this.customerName = customerName;
 		this.createdAt = createdAt;
 		this.total = total;
+		this.status = status;
 	}
 
 	public Integer getId() {
@@ -60,9 +62,13 @@ public class GetOrderDTO implements Serializable{
 		return items;
 	}
 	
+	public String getStatus() {
+		return status;
+	}
+
 	public static GetOrderDTO fromOrder(Order o) {
 		GetOrderDTO getOrderDTO = new GetOrderDTO(o.getId(), o.getDescription(), o.getCustomer().getId(), 
-				o.getCustomer().getName(), o.getCreatedAt(), o.getTotal());
+				o.getCustomer().getName(), o.getCreatedAt(), o.getTotal(), o.getStatus().name());
 		for (OrderItem i : o.getItems()) {
 			getOrderDTO.getItems().add(GetOrderItemDTO.fromOrderItem(i));
 		}

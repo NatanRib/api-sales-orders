@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.natanribeiro.appvendas.enums.OrderStatus;
 
 @Entity
 @Table(name="tb_orders")
@@ -37,6 +41,9 @@ public class Order {
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> items = new ArrayList<>();
 	
+	@Enumerated(EnumType.STRING)
+	private OrderStatus status;
+	
 	public Order(){}
 
 	public Order(Integer id, String description, Customer customer) {
@@ -46,6 +53,7 @@ public class Order {
 		this.customer = customer;
 		this.total = 0.0;
 		this.createdAt = Instant.now();
+		this.status = OrderStatus.OPENED;
 	}
 
 	public Integer getId() {
@@ -87,6 +95,14 @@ public class Order {
 	
 	public List<OrderItem> getItems() {
 		return items;
+	}
+	
+	public OrderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderStatus status) {
+		this.status = status;
 	}
 
 	@Override
