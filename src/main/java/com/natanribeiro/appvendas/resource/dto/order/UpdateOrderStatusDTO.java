@@ -1,9 +1,12 @@
 package com.natanribeiro.appvendas.resource.dto.order;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.natanribeiro.appvendas.enums.OrderStatus;
 
 public class UpdateOrderStatusDTO {
 
+	@NotEmpty(message="Field 'status' cannot be null")
 	private String status;
 	
 	public UpdateOrderStatusDTO() {}

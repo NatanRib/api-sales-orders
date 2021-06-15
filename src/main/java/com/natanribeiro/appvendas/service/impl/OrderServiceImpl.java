@@ -76,11 +76,11 @@ public class OrderServiceImpl implements OrderService{
 	public GetOrderDTO update(Integer id, Order order) {
 		Order o = orderDAO.findById(id).orElseThrow(() -> 
 			new RecordNotFoundException(String.format(orderNotFound, id)));
-		if(order.getCustomer() != null) {
-			o.setCustomer(customerDAO.findById(order.getCustomer().getId())
-					.orElseThrow(() -> new RecordNotFoundException(
-							String.format(customerNotFound, order.getCustomer().getId()))));
-		}
+		
+		o.setCustomer(customerDAO.findById(order.getCustomer().getId())
+				.orElseThrow(() -> new RecordNotFoundException(
+						String.format(customerNotFound, order.getCustomer().getId()))));
+		
 		if(order.getDescription() != null) {
 			o.setDescription(order.getDescription());
 		}

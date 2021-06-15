@@ -60,7 +60,7 @@ public class OrderControlller {
 	}
 	
 	@PostMapping("/{id}/add_item")
-	public GetOrderDTO addItem(@PathVariable Integer id, @RequestBody CreateOrderItemDTO orderItem) {
+	public GetOrderDTO addItem(@PathVariable Integer id, @RequestBody @Valid CreateOrderItemDTO orderItem) {
 		return service.addItem(id, orderItem.toOrderItem());
 	}
 	

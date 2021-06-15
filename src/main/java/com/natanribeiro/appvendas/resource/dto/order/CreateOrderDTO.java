@@ -3,18 +3,18 @@ package com.natanribeiro.appvendas.resource.dto.order;
 import java.io.Serializable;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
 import com.natanribeiro.appvendas.domain.entity.Order;
-import com.sun.istack.NotNull;
 
 public class CreateOrderDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@NotNull
+	@NotNull(message="Field 'customerId' cannot be null")
 	private Integer customerId;
 	
-	@NotEmpty
+	@NotEmpty(message="Field 'description' cannot be null")
 	private String description;
 	
 	public CreateOrderDTO() {}

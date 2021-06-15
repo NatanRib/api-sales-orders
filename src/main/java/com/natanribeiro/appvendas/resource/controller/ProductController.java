@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.natanribeiro.appvendas.resource.dto.product.CreateProductDTO;
 import com.natanribeiro.appvendas.resource.dto.product.GetProductDTO;
+import com.natanribeiro.appvendas.resource.dto.product.UpdateProductDTO;
 import com.natanribeiro.appvendas.service.ProductService;
 
 
@@ -50,7 +51,7 @@ public class ProductController {
 	}
 	
 	@PutMapping("{id}")
-	public GetProductDTO update(@PathVariable Integer id,@RequestBody CreateProductDTO produto) {
+	public GetProductDTO update(@PathVariable Integer id,@RequestBody UpdateProductDTO produto) {
 		return service.update(id, produto.toProduct());
 	}
 }
