@@ -28,7 +28,7 @@ public class CustomerController {
 	@Autowired
 	private CustomerService service;
 	
-	@GetMapping()
+	@GetMapping
 	public List<GetCustomerDTO> Find(CreateCustomerDTO customer){
 		return service.findAll(customer.toCustomer());
 	}
