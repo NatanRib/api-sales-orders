@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
-import com.natanribeiro.appvendas.domain.entity.MyUser;
 import com.natanribeiro.appvendas.domain.entity.Order;
 import com.natanribeiro.appvendas.domain.entity.OrderItem;
 import com.natanribeiro.appvendas.domain.entity.Product;
@@ -17,7 +16,6 @@ import com.natanribeiro.appvendas.domain.repository.CustomerDAO;
 import com.natanribeiro.appvendas.domain.repository.OrderDAO;
 import com.natanribeiro.appvendas.domain.repository.OrderItemDAO;
 import com.natanribeiro.appvendas.domain.repository.ProductDAO;
-import com.natanribeiro.appvendas.utils.TokenService;
 
 @SpringBootApplication
 public class AppVendasApplication {
@@ -28,7 +26,7 @@ public class AppVendasApplication {
 	
 	@Bean
 	CommandLineRunner run(@Autowired CustomerDAO clientes, @Autowired ProductDAO produtos,
-			@Autowired OrderDAO pedidos, @Autowired OrderItemDAO itens, @Autowired TokenService token
+			@Autowired OrderDAO pedidos, @Autowired OrderItemDAO itens
 			) {
 		return args ->{
 			Customer c1 = new Customer(null, "Natan", "7687647754");
@@ -56,14 +54,6 @@ public class AppVendasApplication {
 			produtos.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 			pedidos.saveAll(Arrays.asList(pp1,pp2,pp3,pp4));
 			itens.saveAll(Arrays.asList(ip1,ip2,ip3,ip4,ip5));
-			
-			MyUser u = new MyUser(28, null, null, null, null);
-			
-			String tokenGen = token.tokenGenerator(u);
-			
-			System.out.println(tokenGen);
-			System.out.println("valid: " + token.isValidToken(tokenGen));
-			System.out.println("userId: " + token.getuserId(tokenGen));
 		};
 	}
 }

@@ -1,4 +1,4 @@
-package com.natanribeiro.appvendas.utils;
+package com.natanribeiro.appvendas.security.jwt;
 
 import java.time.Instant;
 import java.util.Date;
@@ -14,7 +14,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
-public class TokenService {
+public class JwtTokenService {
 	
 	@Value("${jwt.expiration}")
 	private String expiration;
@@ -24,9 +24,9 @@ public class TokenService {
 	
 	public String tokenGenerator(MyUser user) {
 		return Jwts.builder()
-				.setSubject(user.getId().toString())
+				.setSubject(user.getUsername())
 				.setExpiration(Date.from(
-						Instant.now().plusSeconds( Long.parseLong(expiration) * -60)))
+						Instant.now().plusSeconds( Long.parseLong(expiration) * 60)))
 				.signWith(SignatureAlgorithm.HS512, secret)
 			.compact();
 	}
@@ -42,7 +42,7 @@ public class TokenService {
 		return Date.from(Instant.now()).before(getClaims(token).getExpiration());
 	}
 	
-	public Integer getuserId(String token) throws ExpiredJwtException{
-		return Integer.parseInt(getClaims(token).getSubject());
+	public String getUsername(String token) throws ExpiredJwtException{
+		return getClaims(token).getSubject();
 	}
 }
