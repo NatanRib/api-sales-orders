@@ -37,8 +37,9 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 		if(authorization != null && authorization.startsWith("Bearer")) {
 			String token = authorization.split(" ")[1];
 			
+							
 			if(tokenService.isValidToken(token)) {
-				AddAuthUserOnContext(token, request);
+					AddAuthUserOnContext(token, request);
 			}
 		}
 		filterChain.doFilter(request, response);

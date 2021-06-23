@@ -11,15 +11,18 @@ public class GetUserDTO implements Serializable{
 	private String username;
 	private String email;
 	private String birthdate;
+	private String role;
 	
 	public GetUserDTO() {}
 
-	public GetUserDTO(Integer id, String username, String email, String birthdate) {
+	public GetUserDTO(Integer id, String username, String email, String birthdate,
+			String role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.birthdate = birthdate;
+		this.role = role;
 	}
 
 	public Integer getId() {
@@ -53,11 +56,20 @@ public class GetUserDTO implements Serializable{
 	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public static GetUserDTO FromUser(MyUser user) {
 		GetUserDTO u = new GetUserDTO();
 		u.setUsername(user.getUsername());
 		u.setEmail(user.getEmail());
+		u.setRole(user.getRole().name());
 		u.setId(user.getId());
 		if (user.getBirthdate() != null) {
 			u.setBirthdate(null);

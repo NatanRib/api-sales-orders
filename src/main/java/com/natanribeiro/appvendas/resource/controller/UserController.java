@@ -35,8 +35,8 @@ public class UserController {
 	
 	@PostMapping("/auth")
 	public GetUserTokenDTO authentic(@RequestBody @Valid UserCredentialsDTO credentials) {
-		userService.AuthenticUser(credentials.toUser());
-		String token = tokenService.tokenGenerator(credentials.toUser());
+		UserCredentialsDTO user = userService.AuthenticUser(credentials.toUser());
+		String token = tokenService.tokenGenerator(user);
 		return new GetUserTokenDTO(token);
 	}
 }

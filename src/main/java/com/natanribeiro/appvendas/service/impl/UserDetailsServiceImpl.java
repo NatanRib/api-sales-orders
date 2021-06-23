@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.natanribeiro.appvendas.domain.entity.MyUser;
 import com.natanribeiro.appvendas.domain.repository.UserDAO;
 import com.natanribeiro.appvendas.resource.dto.user.GetUserDTO;
+import com.natanribeiro.appvendas.resource.dto.user.UserCredentialsDTO;
 import com.natanribeiro.appvendas.service.exception.InvalidPasswordException;
 
 @Service
@@ -32,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 				.builder()
 				.username(user.getUsername())
 				.password(user.getPasswrod())
-				.roles("USER")
+				.roles(user.getRole().name())
 				.build();
 	}
 
@@ -45,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 				.builder()
 				.username(user.getUsername())
 				.password(user.getPasswrod())
-				.roles("USER")
+				.roles(user.getRole().name())
 				.build();
 	}
 	
@@ -54,10 +55,13 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		return GetUserDTO.FromUser(dao.save(user));
 	}
 	
-	public UserDetails AuthenticUser(MyUser user) {
+	public UserCredentialsDTO AuthenticUser(MyUser user) {
 		UserDetails u = loadUserByUsername(user.getUsername());
 		if(encoder.matches(user.getPasswrod(), u.getPassword())) {
-			return u;
+			UserCredentialsDTO credentials = new UserCredentialsDTO();
+			credentials.setUsername(u.getUsername());
+			credentials.setRole(u.getAuthorities().toArray()[0].toString());
+			return credentials;
 		}else {
 			System.out.println("password n bateu");
 			throw new InvalidPasswordException();

@@ -6,6 +6,7 @@ import java.time.Instant;
 import javax.validation.constraints.NotEmpty;
 
 import com.natanribeiro.appvendas.domain.entity.MyUser;
+import com.natanribeiro.appvendas.entity.enums.UserRole;
 
 public class CreateUserDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -51,6 +52,7 @@ public class CreateUserDTO implements Serializable{
 		user.setUsername(username);
 		user.setPasswrod(password);
 		user.setEmail(email);
+		user.setRole(UserRole.USER);
 		return user;
 	}
 }

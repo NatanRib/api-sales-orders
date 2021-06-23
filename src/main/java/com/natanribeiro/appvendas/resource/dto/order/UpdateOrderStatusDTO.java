@@ -2,7 +2,7 @@ package com.natanribeiro.appvendas.resource.dto.order;
 
 import javax.validation.constraints.NotEmpty;
 
-import com.natanribeiro.appvendas.enums.OrderStatus;
+import com.natanribeiro.appvendas.entity.enums.OrderStatus;
 
 public class UpdateOrderStatusDTO {
 

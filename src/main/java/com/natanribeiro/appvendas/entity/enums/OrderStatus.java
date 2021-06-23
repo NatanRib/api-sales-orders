@@ -1,4 +1,4 @@
-package com.natanribeiro.appvendas.enums;
+package com.natanribeiro.appvendas.entity.enums;
 
 public enum OrderStatus {
 	OPENED,

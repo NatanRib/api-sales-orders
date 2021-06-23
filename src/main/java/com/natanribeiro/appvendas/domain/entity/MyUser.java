@@ -4,10 +4,14 @@ import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.natanribeiro.appvendas.entity.enums.UserRole;
 
 @Entity
 @Table(name = "tb_users")
@@ -24,16 +28,21 @@ public class MyUser {
 	@Column(nullable = false)
 	private String passwrod;
 	private Instant birthdate;
+
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
 	
 	public MyUser() {}
 
-	public MyUser(Integer id, String username, String email, String passwrod, Instant birthdate) {
+	public MyUser(Integer id, String username, String email, String passwrod, Instant birthdate,
+			UserRole role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.passwrod = passwrod;
 		this.birthdate = birthdate;
+		this.role = role;
 	}
 
 	public Integer getId() {
@@ -74,6 +83,14 @@ public class MyUser {
 
 	public void setBirthdate(Instant birthdate) {
 		this.birthdate = birthdate;
+	}
+	
+	public UserRole getRole() {
+		return role;
+	}
+
+	public void setRole(UserRole role) {
+		this.role = role;
 	}
 
 	@Override
