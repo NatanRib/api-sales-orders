@@ -25,6 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	JwtTokenService tokenService;
 	
+	@Autowired
+	FilterChainExceptionHandler filterExceptionHandler;
+	
 	@Bean
 	protected JwtAuthFilter jwtAuthFilter() {
 		return new JwtAuthFilter(tokenService, userService);
@@ -57,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 					.permitAll()
 			.and().sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and().addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+			.and().addFilterBefore(filterExceptionHandler, UsernamePasswordAuthenticationFilter.class)
+				.addFilterAfter(jwtAuthFilter(), FilterChainExceptionHandler.class);
 	}
 }

@@ -62,7 +62,7 @@ public class MyExceptionHandler {
 	}
 	
 	@ExceptionHandler(ExpiredJwtException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public DefaultResponseException invalidPasswordException(ExpiredJwtException ex,
 			HttpServletRequest req) {
 		return new DefaultResponseException(ex.getMessage(), req.getRequestURI());
