@@ -31,6 +31,6 @@ public class CreateOrderItemDTO {
 	}
 
 	public OrderItem toOrderItem() {
-		return new OrderItem(null, new Order(orderId, null, null),new Product(productId, null, null), quantity);
+		return new OrderItem(null, new Order(orderId, null, null, null),new Product(productId, null, null), quantity);
 	}
 }

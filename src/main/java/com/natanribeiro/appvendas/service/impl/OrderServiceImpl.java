@@ -4,11 +4,16 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
+import com.natanribeiro.appvendas.domain.entity.MyUser;
 import com.natanribeiro.appvendas.domain.entity.Order;
 import com.natanribeiro.appvendas.domain.entity.OrderItem;
 import com.natanribeiro.appvendas.domain.entity.Product;
@@ -43,16 +48,34 @@ public class OrderServiceImpl implements OrderService{
 
 	
 	@Override
-	public List<GetOrderDTO> findAll(Example<Order> example) {
+	public List<GetOrderDTO> findAll(Order order, HttpServletRequest request){
+		
+		if (request.getAttribute("userId")!= null) {
+			MyUser u = new MyUser();
+			u.setId(Integer.parseInt(
+					String.valueOf(request.getAttribute("userId"))));
+			order.setUser(u);
+		}else {
+			System.out.println("header userId = null");
+		}
+		
+		ExampleMatcher matcher = ExampleMatcher.matching()
+				.withIgnoreCase()
+				.withStringMatcher(StringMatcher.CONTAINING);
+		Example<Order> example = Example.of(order, matcher);
+		
 		return orderDAO.findAll(example).stream()
 				.map(o -> GetOrderDTO.fromOrder(o)).collect(Collectors.toList());
 	}
 
 	@Override
-	public GetOrderDTO findById(Integer id) {
-		return GetOrderDTO.fromOrder(orderDAO.findById(id).orElseThrow(
+	public GetOrderDTO findById(Integer orderId, HttpServletRequest request) {
+		
+		Integer userId = Integer.parseInt(
+				String.valueOf(request.getAttribute("userId")));
+		return GetOrderDTO.fromOrder(orderDAO.findByIdAndUserId(orderId, userId).orElseThrow(
 				() -> new RecordNotFoundException(
-						String.format(orderNotFound, id))));
+						String.format(orderNotFound, orderId))));
 	}
 	
 	@Override

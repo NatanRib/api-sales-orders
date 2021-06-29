@@ -15,4 +15,6 @@ public interface OrderDAO extends JpaRepository<Order, Integer>{
 	public List<Order> findByCustomerId(@Param("id") int clienteId);//tambem funciona como Query Method
 
 	public Optional<Order> findByIdAndItemsId(Integer Id, Integer itemId);
+	
+	public Optional<Order> findByIdAndUserId(Integer Id, Integer userId);
 }

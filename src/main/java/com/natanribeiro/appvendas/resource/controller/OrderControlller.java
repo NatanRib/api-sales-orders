@@ -2,12 +2,10 @@ package com.natanribeiro.appvendas.resource.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,17 +34,13 @@ public class OrderControlller {
 	OrderService service;
 	
 	@GetMapping
-	public List<GetOrderDTO> find(Order order){
-		ExampleMatcher matcher = ExampleMatcher.matching()
-				.withIgnoreCase()
-				.withStringMatcher(StringMatcher.CONTAINING);
-		Example<Order> example = Example.of(order, matcher);
-		return service.findAll(example);
+	public List<GetOrderDTO> find(Order order, HttpServletRequest request){
+		return service.findAll(order, request);
 	}
 	
 	@GetMapping("/{id}")
-	public GetOrderDTO findById(@PathVariable Integer id) {
-		return service.findById(id);
+	public GetOrderDTO findById(@PathVariable Integer id, HttpServletRequest request) {
+		return service.findById(id, request);
 	}
 	
 	@PostMapping

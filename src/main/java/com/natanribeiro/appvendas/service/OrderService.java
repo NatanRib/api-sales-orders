@@ -2,7 +2,7 @@ package com.natanribeiro.appvendas.service;
 
 import java.util.List;
 
-import org.springframework.data.domain.Example;
+import javax.servlet.http.HttpServletRequest;
 
 import com.natanribeiro.appvendas.domain.entity.Order;
 import com.natanribeiro.appvendas.domain.entity.OrderItem;
@@ -11,7 +11,9 @@ import com.natanribeiro.appvendas.resource.dto.order.UpdateOrderStatusDTO;
 
 public interface OrderService {
 
-	public GetOrderDTO findById(Integer id);
+	List<GetOrderDTO> findAll(Order order, HttpServletRequest request);
+
+	public GetOrderDTO findById(Integer id, HttpServletRequest request);
 
 	public GetOrderDTO save(Order order);
 
@@ -24,6 +26,4 @@ public interface OrderService {
 	public GetOrderDTO deleteItem(Integer orderId, Integer itemId);
 
 	public GetOrderDTO updateStatus(Integer id, UpdateOrderStatusDTO status);
-
-	List<GetOrderDTO> findAll(Example<Order> example);
 }

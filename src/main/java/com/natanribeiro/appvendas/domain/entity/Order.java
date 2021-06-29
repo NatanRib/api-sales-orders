@@ -41,18 +41,23 @@ public class Order {
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> items = new ArrayList<>();
 	
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	private MyUser user;
+	
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
 	
 	public Order(){}
 
-	public Order(Integer id, String description, Customer customer) {
+	public Order(Integer id, String description, Customer customer, MyUser user) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.customer = customer;
 		this.total = 0.0;
 		this.createdAt = Instant.now();
+		this.user = user;
 		this.status = OrderStatus.OPENED;
 	}
 
@@ -104,6 +109,14 @@ public class Order {
 	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
+	
+	public MyUser getUser() {
+		return user;
+	}
+
+	public void setUser(MyUser user) {
+		this.user = user;
+	}
 
 	@Override
 	public int hashCode() {
@@ -128,12 +141,6 @@ public class Order {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-	
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", description=" + description + ", createdAt=" + createdAt + ", total=" + total
-				+ ", customer=" + customer + ", items=" + items + "]";
 	}
 
 	private Double sumTotal(){

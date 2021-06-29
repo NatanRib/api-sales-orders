@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -35,6 +36,9 @@ public class MyUser implements UserDetails{
 	@Column(nullable = false)
 	private String password;
 	private Instant birthdate;
+	
+	@OneToMany(mappedBy = "user")
+	List<Order> Orders = new ArrayList<>();
 
 	@Enumerated(EnumType.STRING)
 	private UserRole role;
@@ -99,6 +103,14 @@ public class MyUser implements UserDetails{
 
 	public void setRole(UserRole role) {
 		this.role = role;
+	}
+	
+	public List<Order> getOrders() {
+		return Orders;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
