@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Order(2)
@@ -37,9 +36,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 		
 		String authorization = request.getHeader("Authorization");
 		if(authorization != null && authorization.startsWith("Bearer")) {
-			String token = authorization.split(" ")[1];
-			
-							
+			String token = authorization.split(" ")[1];			
 			if(tokenService.isValidToken(token)) {
 					AddAuthUserOnContext(token, request);
 			}
@@ -50,10 +47,10 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 	private void AddAuthUserOnContext(String token, HttpServletRequest request) {
 		String username= tokenService.getUsername(token);
 		UserDetails user = userService.loadUserByUsername(username);
-		
 		UsernamePasswordAuthenticationToken authUser = 
 				new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-		authUser.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+		String userId = tokenService.getUserId(token);
+		request.setAttribute("userId", userId); //testar
 		SecurityContextHolder.getContext().setAuthentication(authUser);
 	}
 

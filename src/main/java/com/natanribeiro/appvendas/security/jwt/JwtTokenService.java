@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.natanribeiro.appvendas.resource.dto.user.UserCredentialsDTO;
+import com.natanribeiro.appvendas.domain.entity.MyUser;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -23,10 +23,10 @@ public class JwtTokenService {
 	@Value("${jwt.secret}")
 	private String secret;
 
-	public String tokenGenerator(UserCredentialsDTO user) {
+	public String tokenGenerator(MyUser u) {
 		HashMap<String, Object> claims = new HashMap<>();
-		claims.put("sub", user.getUsername());
-		claims.put("role", user.getRole());
+		claims.put("sub", u.getUsername());
+		claims.put("userId", u.getId());
 
 		return Jwts.builder().addClaims(claims)
 				.setExpiration(Date.from(Instant.now().plusSeconds(Long.parseLong(expiration) * 60)))
@@ -46,5 +46,9 @@ public class JwtTokenService {
 
 	public String getUsername(String token) throws ExpiredJwtException {
 		return getClaims(token).getSubject();
+	}
+	
+	public String getUserId(String token){
+		return String.valueOf(getClaims(token).get("userId"));
 	}
 }

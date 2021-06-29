@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.natanribeiro.appvendas.entity.enums.OrderStatus;
+import com.natanribeiro.appvendas.domain.entity.enums.OrderStatus;
 
 @Entity
 @Table(name="tb_orders")

@@ -1,5 +1,7 @@
 package com.natanribeiro.appvendas;
 
+import java.net.Inet4Address;
+import java.time.Instant;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,15 +9,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
+import com.natanribeiro.appvendas.domain.entity.MyUser;
 import com.natanribeiro.appvendas.domain.entity.Order;
 import com.natanribeiro.appvendas.domain.entity.OrderItem;
 import com.natanribeiro.appvendas.domain.entity.Product;
+import com.natanribeiro.appvendas.domain.entity.enums.UserRole;
 import com.natanribeiro.appvendas.domain.repository.CustomerDAO;
 import com.natanribeiro.appvendas.domain.repository.OrderDAO;
 import com.natanribeiro.appvendas.domain.repository.OrderItemDAO;
 import com.natanribeiro.appvendas.domain.repository.ProductDAO;
+import com.natanribeiro.appvendas.service.impl.UserDetailsServiceImpl;
 
 @SpringBootApplication
 public class AppVendasApplication {
@@ -26,7 +32,8 @@ public class AppVendasApplication {
 	
 	@Bean
 	CommandLineRunner run(@Autowired CustomerDAO clientes, @Autowired ProductDAO produtos,
-			@Autowired OrderDAO pedidos, @Autowired OrderItemDAO itens
+			@Autowired OrderDAO pedidos, @Autowired OrderItemDAO itens, @Autowired PasswordEncoder encoder,
+			@Autowired UserDetailsServiceImpl userService
 			) {
 		return args ->{
 			Customer c1 = new Customer(null, "Natan", "7687647754");
@@ -50,10 +57,16 @@ public class AppVendasApplication {
 			OrderItem ip4 = new OrderItem(null, pp3, p3, 1);
 			OrderItem ip5 = new OrderItem(null, pp4, p4, 4);
 			
+			MyUser admin = new MyUser(null, "admin", "admin@email.com", "123456",
+					Instant.parse("1998-07-25T00:00:00.00Z"), UserRole.ROLE_ADMIN);
+			
 			clientes.saveAll(Arrays.asList(c1,c2,c3));
 			produtos.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 			pedidos.saveAll(Arrays.asList(pp1,pp2,pp3,pp4));
 			itens.saveAll(Arrays.asList(ip1,ip2,ip3,ip4,ip5));
+			userService.save(admin);
+			
+			System.out.println("IP: " + String.valueOf(Inet4Address.getLocalHost().getHostAddress()));
 		};
 	}
 }

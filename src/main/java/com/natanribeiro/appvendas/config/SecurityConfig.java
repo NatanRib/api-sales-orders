@@ -48,16 +48,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 			.authorizeRequests()
-				.antMatchers("/customers/**")
-					.hasRole("USER")
-				.antMatchers("/products/**")
-					.hasRole("ADMIN")
-				.antMatchers("/orders/**")
-					.hasRole("USER")
-				.antMatchers("/orders/**/*")
-					.hasRole("USER")
-				.antMatchers(HttpMethod.POST, "/users/**")
+				.antMatchers(HttpMethod.POST, "/api/users/auth")
 					.permitAll()
+				.antMatchers(HttpMethod.GET, "/api/users/**")
+					.hasAnyRole("USER", "ADMIN")
+					/*
+					.antMatchers(HttpMethod.POST)
+					.hasRole("ADMIN")
+				
+					*/
 			.and().sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and().addFilterBefore(filterExceptionHandler, UsernamePasswordAuthenticationFilter.class)

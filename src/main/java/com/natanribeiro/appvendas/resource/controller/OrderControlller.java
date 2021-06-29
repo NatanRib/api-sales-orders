@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +37,11 @@ public class OrderControlller {
 	
 	@GetMapping
 	public List<GetOrderDTO> find(Order order){
-		return service.findAll(order);
+		ExampleMatcher matcher = ExampleMatcher.matching()
+				.withIgnoreCase()
+				.withStringMatcher(StringMatcher.CONTAINING);
+		Example<Order> example = Example.of(order, matcher);
+		return service.findAll(example);
 	}
 	
 	@GetMapping("/{id}")

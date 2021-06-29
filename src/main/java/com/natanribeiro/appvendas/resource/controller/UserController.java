@@ -14,7 +14,6 @@ import com.natanribeiro.appvendas.resource.dto.user.CreateUserDTO;
 import com.natanribeiro.appvendas.resource.dto.user.GetUserDTO;
 import com.natanribeiro.appvendas.resource.dto.user.GetUserTokenDTO;
 import com.natanribeiro.appvendas.resource.dto.user.UserCredentialsDTO;
-import com.natanribeiro.appvendas.security.jwt.JwtTokenService;
 import com.natanribeiro.appvendas.service.impl.UserDetailsServiceImpl;
 
 @RestController
@@ -24,9 +23,6 @@ public class UserController {
 	@Autowired
 	UserDetailsServiceImpl userService;
 	
-	@Autowired
-	JwtTokenService tokenService;
-	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public GetUserDTO create(@RequestBody @Valid CreateUserDTO user) {
@@ -35,8 +31,6 @@ public class UserController {
 	
 	@PostMapping("/auth")
 	public GetUserTokenDTO authentic(@RequestBody @Valid UserCredentialsDTO credentials) {
-		UserCredentialsDTO user = userService.AuthenticUser(credentials.toUser());
-		String token = tokenService.tokenGenerator(user);
-		return new GetUserTokenDTO(token);
+		return userService.AuthenticUser(credentials.toUser());
 	}
 }

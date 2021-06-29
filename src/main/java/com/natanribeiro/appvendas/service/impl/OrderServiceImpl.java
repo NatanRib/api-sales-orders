@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 
 import com.natanribeiro.appvendas.domain.entity.Customer;
@@ -43,14 +41,11 @@ public class OrderServiceImpl implements OrderService{
 	private String productNotFound = "Product with id %d not found!";
 	private String customerNotFound = "Customer with id %d not found!";
 
+	
 	@Override
-	public List<GetOrderDTO> findAll(Order order) {
-		ExampleMatcher matcher = ExampleMatcher.matching()
-				.withIgnoreCase()
-				.withStringMatcher(StringMatcher.CONTAINING);
-		Example<Order> example = Example.of(order, matcher);
-		return orderDAO.findAll(example).stream().map(o -> 
-			GetOrderDTO.fromOrder(o)).collect(Collectors.toList());
+	public List<GetOrderDTO> findAll(Example<Order> example) {
+		return orderDAO.findAll(example).stream()
+				.map(o -> GetOrderDTO.fromOrder(o)).collect(Collectors.toList());
 	}
 
 	@Override

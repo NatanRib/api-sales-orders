@@ -1,6 +1,9 @@
 package com.natanribeiro.appvendas.domain.entity;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,12 +14,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.natanribeiro.appvendas.entity.enums.UserRole;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.natanribeiro.appvendas.domain.entity.enums.UserRole;
 
 @Entity
 @Table(name = "tb_users")
-public class MyUser {
-	
+public class MyUser implements UserDetails{
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -26,7 +33,7 @@ public class MyUser {
 	private String email;
 	
 	@Column(nullable = false)
-	private String passwrod;
+	private String password;
 	private Instant birthdate;
 
 	@Enumerated(EnumType.STRING)
@@ -34,13 +41,13 @@ public class MyUser {
 	
 	public MyUser() {}
 
-	public MyUser(Integer id, String username, String email, String passwrod, Instant birthdate,
+	public MyUser(Integer id, String username, String email, String password, Instant birthdate,
 			UserRole role) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.email = email;
-		this.passwrod = passwrod;
+		this.password = password;
 		this.birthdate = birthdate;
 		this.role = role;
 	}
@@ -69,12 +76,13 @@ public class MyUser {
 		this.email = email;
 	}
 
-	public String getPasswrod() {
-		return passwrod;
+	@Override
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPasswrod(String passwrod) {
-		this.passwrod = passwrod;
+	public void setPasswrod(String password) {
+		this.password = password;
 	}
 
 	public Instant getBirthdate() {
@@ -93,6 +101,37 @@ public class MyUser {
 		this.role = role;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<UserRole> authorities = new ArrayList<>();
+		authorities.add(getRole());
+		return authorities;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

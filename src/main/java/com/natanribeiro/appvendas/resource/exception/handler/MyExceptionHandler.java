@@ -15,7 +15,7 @@ import com.natanribeiro.appvendas.service.exception.DatabaseException;
 import com.natanribeiro.appvendas.service.exception.InvalidPasswordException;
 import com.natanribeiro.appvendas.service.exception.RecordNotFoundException;
 
-import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 
 @RestControllerAdvice
 public class MyExceptionHandler {
@@ -56,14 +56,21 @@ public class MyExceptionHandler {
 	
 	@ExceptionHandler(UsernameNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public DefaultResponseException invalidPasswordException(UsernameNotFoundException ex,
+	public DefaultResponseException usernameNotFoundException(UsernameNotFoundException ex,
 			HttpServletRequest req) {
 		return new DefaultResponseException(ex.getMessage(), req.getRequestURI());
 	}
 	
-	@ExceptionHandler(ExpiredJwtException.class)
+	@ExceptionHandler(JwtException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public DefaultResponseException invalidPasswordException(ExpiredJwtException ex,
+	public DefaultResponseException JwtException(JwtException ex,
+			HttpServletRequest req) {
+		return new DefaultResponseException(ex.getMessage(), req.getRequestURI());
+	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public DefaultResponseException genericException(RuntimeException ex, 
 			HttpServletRequest req) {
 		return new DefaultResponseException(ex.getMessage(), req.getRequestURI());
 	}
