@@ -54,10 +54,13 @@ public class TestConfig implements CommandLineRunner {
 		MyUser admin = new MyUser(null, "admin", "admin@email.com", "123456",
 				Instant.parse("1998-07-25T00:00:00.00Z"), UserRole.ROLE_ADMIN);
 		
+		MyUser natan = new MyUser(null, "natan", "natan@email.com", "12345",
+				Instant.parse("1998-07-25T00:00:00.00Z"), UserRole.ROLE_USER);
+		
 		Order pp1 = new Order(null, "Venda de mercadoria", c1, admin);
 		Order pp2 = new Order(null, "Venda de mercadoria", c2, admin);
-		Order pp3 = new Order(null, "Venda de mercadoria", c3, admin);
-		Order pp4 = new Order(null, "Venda de mercadoria", c1, admin);
+		Order pp3 = new Order(null, "Venda de mercadoria", c3, natan);
+		Order pp4 = new Order(null, "Venda de mercadoria", c1, natan);
 		
 		OrderItem ip1 = new OrderItem(null, pp4, p5, 2);
 		OrderItem ip2 = new OrderItem(null, pp2, p1, 1);
@@ -68,6 +71,7 @@ public class TestConfig implements CommandLineRunner {
 		clientes.saveAll(Arrays.asList(c1,c2,c3));
 		produtos.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 		userService.save(admin);
+		userService.save(natan);
 		pedidos.saveAll(Arrays.asList(pp1,pp2,pp3,pp4));
 		itens.saveAll(Arrays.asList(ip1,ip2,ip3,ip4,ip5));
 		

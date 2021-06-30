@@ -35,8 +35,9 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		
 		String authorization = request.getHeader("Authorization");
-		if(authorization != null && authorization.startsWith("Bearer")) {
-			String token = authorization.split(" ")[1];			
+		if(AuthorizationIsValid(authorization)) {
+			String token = authorization.replaceFirst("Bearer ", "");
+			System.out.println("token: " + token);
 			if(tokenService.isValidToken(token)) {
 					AddAuthUserOnContext(token, request);
 			}
@@ -53,5 +54,10 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 		request.setAttribute("userId", userId); //testar
 		SecurityContextHolder.getContext().setAuthentication(authUser);
 	}
-
+	
+	private boolean AuthorizationIsValid(String authorization) {
+		if (authorization != null && authorization.startsWith("Bearer")
+				&& authorization.split(" ")[1] != "") return true;
+		return false;
+	}
 }

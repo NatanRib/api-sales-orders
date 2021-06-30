@@ -68,10 +68,12 @@ public class MyExceptionHandler {
 		return new DefaultResponseException(ex.getMessage(), req.getRequestURI());
 	}
 	
+	/*
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public DefaultResponseException genericException(RuntimeException ex, 
 			HttpServletRequest req) {
 		return new DefaultResponseException(ex.getMessage(), req.getRequestURI());
 	}
+	*/
 }
