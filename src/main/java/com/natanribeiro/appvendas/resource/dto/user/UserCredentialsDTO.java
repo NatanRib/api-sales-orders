@@ -14,7 +14,6 @@ public class UserCredentialsDTO implements Serializable{
 	@NotEmpty(message="Field 'password' cannot be empty")
 	private String password;
 	
-	private String role;
 	
 	public UserCredentialsDTO(){}
 
@@ -38,14 +37,6 @@ public class UserCredentialsDTO implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
 	}
 
 	public MyUser toUser(){

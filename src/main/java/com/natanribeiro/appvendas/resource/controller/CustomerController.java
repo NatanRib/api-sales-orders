@@ -21,6 +21,9 @@ import com.natanribeiro.appvendas.resource.dto.customer.GetCustomerDTO;
 import com.natanribeiro.appvendas.resource.dto.customer.UpdateCustomerDTO;
 import com.natanribeiro.appvendas.service.CustomerService;
 
+import io.swagger.annotations.Api;
+
+@Api("Customers")
 @RestController
 @RequestMapping("/customers")
 public class CustomerController {

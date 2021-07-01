@@ -30,6 +30,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/auth")
+	@ResponseStatus(HttpStatus.OK)
 	public GetUserTokenDTO authentic(@RequestBody @Valid UserCredentialsDTO credentials) {
 		return userService.AuthenticUser(credentials.toUser());
 	}
